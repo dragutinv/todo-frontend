@@ -1,4 +1,4 @@
-# todo
+# Front end for 'todo' project
 
 ## Project setup
 ```
@@ -19,7 +19,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-# todo-frontend
