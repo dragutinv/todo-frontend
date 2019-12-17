@@ -1,19 +1,23 @@
 <template>
   <div class="home">
-  <h3>TODO list</h3>
-    <div v-for="item in activeTodoItems" v-bind:key="item.id">
-      {{ item.message }}
-      <div>
+    <h3>TODO list</h3>
+      <div class='todo-add'>
+        <input type="text" id="todo-new" placeholder="What should I remember to do" class="todo-text-input" />
         <vue-tags-input
-          v-model="category"
-          :tags="categories"
-          :autocomplete-items="autocompleteCategories"
-          @tags-changed="update"
-        />
+                    v-model="category"
+                    :tags="categories"
+                    :autocomplete-items="autocompleteCategories"
+                    placeholder="How I would categorise this"
+                    @tags-changed="update"
+                  />
       </div>
-    </div>
-    <div v-for="item in inactiveTodoItems" v-bind:key="item.id">
-        <del>{{ item.message }}</del>
+      <div v-for="item in activeTodoItems" v-bind:key="item.id" class="todo-list">
+          <div class="todo-text"><input type="checkbox"/>{{ item.message }}</div>
+          <div v-for="category in item.categories" v-bind:key="category.id" class="todo-categories">{{ category}}</div>
+      </div>
+      <div v-for="item in inactiveTodoItems" v-bind:key="item.id" class="todo-list">
+          <div class="todo-text"><input type="checkbox"/>{{ item.message }}</div>
+          <div v-for="category in item.categories" v-bind:key="category.id" class="todo-categories">{{ category}}</div>
       </div>
   </div>
 </template>
@@ -33,8 +37,8 @@ export default {
       category: '',
       autocompleteCategories: [],
       items: [
-        { message: 'Do this', categories: [ { category: 'cat1' } ], done: false },
-        { message: 'Do that', categories: [ { category: 'cat2' } ], done: true }
+        { message: 'Do this', categories: [ 'cat1', 'cat2' ], done: false },
+        { message: 'Do that', categories: [ 'cat2' ], done: true }
       ],
       autocompleteTimeout: null
     }
