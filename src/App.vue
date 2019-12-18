@@ -9,7 +9,6 @@
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 
@@ -26,37 +25,25 @@
   color: #42b983;
 }
 
-/* TODO - ADD NEW - start */
-
-.todo-add {
-  margin-bottom: 20px;
-  padding: 10px 0;
-  width: 40%;
-
-}
-.todo-text-input {
-  padding: 10px;
-  font-size: 1.3em;
-  width: 100%;
-  margin-bottom: 5px;
+.home {
+  margin-top: 5%;
 }
 
-/********************/
-
-/* TODO - SHOW LIST - start */
-
-.todo-list {
-  margin-bottom: 10px;
+.vue-tags-input .ti-input {
+  border-radius: 0.3rem;
 }
 
-.todo-text {
-  text-align: left;
-  padding: 4px 0;
+.todo-category {
+  background-color: #5C6BC0;
+  color: #fff;
+  border-radius: 0.3rem;
+  padding: 3px 5px;
+  margin: 2px;
+  font-size: .65em;
 }
 
-.todo-categories {
-
+.todo-item {
+  margin: 0.3rem 0;
 }
 
-/********************/
 </style>

@@ -1,39 +1,71 @@
 <template>
   <div class="home">
-    <h3>TODO list</h3>
-      <div class='todo-add'>
-        <input type="text" id="todo-new" placeholder="What should I remember to do" class="todo-text-input" />
-        <vue-tags-input
-                    v-model="category"
-                    :tags="categories"
-                    :autocomplete-items="autocompleteCategories"
-                    placeholder="How I would categorise this"
-                    @tags-changed="update"
-                  />
-      </div>
-      <div v-for="item in activeTodoItems" v-bind:key="item.id" class="todo-list">
-          <div class="todo-text"><input type="checkbox"/>{{ item.message }}</div>
-          <div v-for="category in item.categories" v-bind:key="category.id" class="todo-categories">{{ category}}</div>
-      </div>
-      <div v-for="item in inactiveTodoItems" v-bind:key="item.id" class="todo-list">
-          <div class="todo-text"><input type="checkbox"/>{{ item.message }}</div>
-          <div v-for="category in item.categories" v-bind:key="category.id" class="todo-categories">{{ category}}</div>
-      </div>
-  </div>
+      <b-container>
+        <b-row class="text-center">
+          <b-col>
+           <h3>TODO list</h3>
+          </b-col>
+        </b-row>
+        <b-row style="margin-top:2rem">
+          <b-col>
+            <b-input-group>
+              <b-form-input id="input-large" size="lg" placeholder="What should I remember to do"></b-form-input>
+              <b-button variant="outline-primary" size="lg">Save</b-button>
+            </b-input-group>
+          </b-col>
+         </b-row>
+         <b-row>
+          <b-col>
+            <vue-tags-input
+                        v-model="category"
+                        :autocomplete-items="autocompleteCategories"
+                        placeholder="How I would categorise this"
+                        @tags-changed="update"
+                      />
+          </b-col>
+         </b-row>
+         <b-row style="margin-top:2rem">
+          <b-col>
+            <div v-for="item in activeTodoItems" v-bind:key="item.id"  class="todo-item">
+             <b-form-checkbox size="lg">
+              {{ item.message }}
+              {{ item.done }}
+              <span v-for="category in item.categories" v-bind:key="category.id" class="todo-category">{{ category}}</span>
+             </b-form-checkbox>
+            </div>
+          </b-col>
+         </b-row>
+         <b-row>
+          <b-col>
+            <todoItem></todoItem>
+            <div v-for="item in inactiveTodoItems" v-bind:key="item.id" class="todo-item">
+              <b-form-checkbox size="lg">
+                {{ item.message }}
+                <span v-for="category in item.categories" v-bind:key="category.id" class="todo-category">{{ category}}</span>
+               </b-form-checkbox>
+            </div>
+          </b-col>
+         </b-row>
+      </b-container>
+     </div><!-- /.home -->
 </template>
 
 <script>
 // @ is an alias to /src
 import VueTagsInput from '@johmun/vue-tags-input'
 import axios from 'axios'
+import todoItem from '../components/todoItem'
+
+// Define a new component called button-counter
 
 export default {
   name: 'todo',
   components: {
-    VueTagsInput
+    VueTagsInput, todoItem
   },
   data () {
     return {
+      checked: '',
       category: '',
       autocompleteCategories: [],
       items: [
