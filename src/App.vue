@@ -42,8 +42,12 @@
   font-size: .65em;
 }
 
-.todo-item {
-  margin: 0.3rem 0;
+.todo-message {
+  margin-right: 1rem;
+}
+
+.doneTask {
+  text-decoration: line-through;
 }
 
 </style>
