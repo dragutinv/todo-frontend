@@ -50,13 +50,13 @@
             </b-row>
             <b-row style="margin-top:1rem">
                 <b-col>
-                    <todoItem v-for="item in activeTodoItems" v-bind:key="item.id" v-bind:message="item.message"
+                    <todoItem v-for="item in activeTodoItems" v-bind:key="item.id" v-bind:id="item.id" v-bind:message="item.message"
                               v-bind:categories="item.categories" v-bind:done="item.done"></todoItem>
                 </b-col>
             </b-row>
             <b-row>
                 <b-col>
-                    <todoItem v-for="item in inactiveTodoItems" v-bind:key="item.id" v-bind:message="item.message"
+                    <todoItem v-for="item in inactiveTodoItems" v-bind:key="item.id" v-bind:id="item.id" v-bind:message="item.message"
                               v-bind:categories="item.categories" v-bind:done="item.done"></todoItem>
                 </b-col>
             </b-row>
@@ -67,6 +67,10 @@
 <script>
 import VueTagsInput from '@johmun/vue-tags-input'
 import todoItem from '@/components/todoItem'
+import axios from 'axios'
+
+axios.defaults.baseURL = 'http://localhost:8090/api'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 
 export default {
   name: 'todo',
@@ -80,11 +84,13 @@ export default {
       tagsForFiltering: [],
       newTodoCategory: '',
       filterTodoCategory: '',
-      items: [
-        { id: '1', message: 'Do this', categories: [ 'cat1', 'cat2' ], done: false },
-        { id: '2', message: 'Do that', categories: [ 'cat2' ], done: true }
-      ]
+      items: [],
+      serverCategories: []
     }
+  },
+  created: function () {
+    this.getTodoItemsFromServer()
+    this.getCategoriesFromServer()
   },
   computed: {
     activeTodoItems: function () {
@@ -133,7 +139,9 @@ export default {
       this.tags.forEach(function (item, index) {
         associatedCategories.push(item.text)
       })
-      this.items.unshift({ message: this.newTodo, done: false, categories: associatedCategories })
+      var newTodoItem = { message: this.newTodo, done: false, categories: associatedCategories }
+      this.items.unshift(newTodoItem)
+      this.saveTodoItemToServer(newTodoItem)
       this.newTodo = ''
       this.tags = []
     },
@@ -150,6 +158,10 @@ export default {
       var existingCategories = new Set()
       this.items.forEach(function (item, index) {
         item.categories.forEach(function (category, index) { existingCategories.add(category) }, this)
+      }, this)
+
+      this.serverCategories.forEach(function (category, index) {
+        existingCategories.add(category)
       }, this)
       return existingCategories
     },
@@ -169,6 +181,32 @@ export default {
         return this.items.filter(i => i.done === isDone && this.intersect(i.categories, filterBasedOnCategories).length > 0)
       }
       return this.items.filter(i => i.done === isDone)
+    },
+    getTodoItemsFromServer () {
+      var self = this
+      axios.get('/allTodoItems')
+        .then(function (response) {
+          self.items = response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    saveTodoItemToServer (newTodoItem) {
+      axios.post('/saveItem', newTodoItem
+      ).catch(function (error) {
+        console.log(error)
+      })
+    },
+    getCategoriesFromServer () {
+      var self = this
+      axios.get('/categories')
+        .then(function (response) {
+          self.serverCategories = response.data
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
 }
